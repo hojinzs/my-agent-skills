@@ -20,8 +20,10 @@ Before starting any task, always perform the checks below. Do not skip this step
 ### Step 1: Verify CLI Installation
 
 ```bash
-coolify --version
+coolify version
 ```
+
+Note: the CLI uses `coolify version` as a subcommand, not `--version`.
 
 If this command fails (command not found), the CLI is not installed. Guide the user through installation:
 
@@ -45,7 +47,7 @@ irm https://raw.githubusercontent.com/coollabsio/coolify-cli/main/scripts/instal
 go install github.com/coollabsio/coolify-cli/coolify@latest
 ```
 
-After installation, verify again with `coolify --version`.
+After installation, verify again with `coolify version`.
 
 ### Step 2: Verify Context (Server Connection)
 
@@ -110,8 +112,11 @@ coolify app logs <uuid> --follow
 # View deployment history
 coolify app deployments list <uuid>
 
-# View build logs for a specific deployment
-coolify app deployments logs <uuid> [deployment-uuid]
+# View build logs for a specific deployment (summary)
+coolify app deployments logs <app-uuid> <deployment-uuid>
+
+# View build logs with full Docker build output (recommended for debugging)
+coolify app deployments logs <app-uuid> <deployment-uuid> --debuglogs
 
 # List servers and their status
 coolify server list
@@ -120,6 +125,10 @@ coolify server get <uuid> --resources
 # List all resources across projects
 coolify resources list
 ```
+
+**Identifying apps by name vs UUID:** When multiple apps share the same name
+(e.g., staging and production instances), always use `coolify app list --format=json`
+to find the correct UUID and use UUID-based commands to avoid ambiguity.
 
 ### 3. Change Settings
 
@@ -229,14 +238,62 @@ For commands related to databases, services, servers, private keys, and GitHub A
 - Manage SSH private keys
 - Configure GitHub App integrations
 
+## Monitoring a Deployment
+
+After triggering a deploy, the response includes a `deployment_uuid`. Use it to track progress:
+
+```bash
+# Check deployment status (look for "status" field: in_progress, finished, failed)
+coolify app deployments list <app-uuid> --format=json
+
+# View build logs (summary only)
+coolify app deployments logs <app-uuid> <deployment-uuid>
+
+# View full Docker build output (use this to see actual build errors)
+coolify app deployments logs <app-uuid> <deployment-uuid> --debuglogs
+```
+
+The `--debuglogs` flag is important because without it, you only see high-level status messages.
+The actual build errors (npm failures, Dockerfile issues, compilation errors) only appear in debug logs.
+
+**Polling pattern:** Deployments can take several minutes (especially with native module compilation).
+Check the status periodically via `coolify app deployments list --format=json` and look at the
+`status` field. Once it changes from `in_progress` to `finished` or `failed`, check the final logs.
+
+## Debugging a Failed Deployment
+
+When a deployment fails, follow this sequence:
+
+1. **Get the failed deployment's logs with debug output:**
+   ```bash
+   coolify app deployments logs <app-uuid> <deployment-uuid> --debuglogs
+   ```
+
+2. **Common failure patterns and fixes:**
+
+   | Error | Cause | Fix |
+   |-------|-------|-----|
+   | `npm ci` — "package.json and package-lock.json are in sync" | Lock file out of date or generated with a different Node version | Regenerate lock file with the same Node version as the Dockerfile |
+   | `Cannot find module '@tailwindcss/...'` | Build-time deps in devDependencies + `NODE_ENV=production` skipping them | Use `npm ci --include=dev` in Dockerfile, or move deps to dependencies |
+   | `failed to solve: process ... did not complete successfully` | Dockerfile build step failed | Read the lines above this error for the actual failure |
+   | Healthcheck failed | App built but isn't responding on the expected port | Check app logs with `coolify app logs <uuid>`, verify port and health check path |
+
+3. **Fix the root cause** in the source code or Dockerfile, push the changes, then redeploy:
+   ```bash
+   coolify deploy uuid <app-uuid> --force
+   ```
+
+4. **Verify the new deployment succeeds** by monitoring logs again.
+
 ## Workflow Guide
 
 Follow the steps below based on the user's request. Always perform **"First Step: Verify Installation and Connection"** before proceeding.
 
 **Deploy requests** (e.g., "deploy my app", "push to production"):
 1. Identify the target app name or UUID (if unknown, run `coolify app list`)
-2. Run `coolify deploy name <name>` or `coolify deploy uuid <uuid>`
-3. Verify the deployment result (`coolify app deployments list <uuid>`)
+2. If multiple apps share the same name, use `coolify app list --format=json` to find the correct UUID
+3. Run `coolify deploy name <name>` or `coolify deploy uuid <uuid>`
+4. Monitor the deployment and verify the result (see "Monitoring a Deployment" below)
 
 **Status check requests** (e.g., "check app status", "show server info"):
 1. Identify the target (app, server, or all resources)
