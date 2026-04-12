@@ -1,0 +1,8 @@
+{
+  "name": "coolify-cli",
+  "description": "Deploy applications, check deployment status, and manage settings via the Coolify CLI.",
+  "version": "1.0.0",
+  "author": {
+    "name": "hojinzs"
+  }
+}

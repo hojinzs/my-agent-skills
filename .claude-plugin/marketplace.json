@@ -1,0 +1,13 @@
+{
+  "name": "my-agent-skills",
+  "owner": {
+    "name": "hojinzs"
+  },
+  "plugins": [
+    {
+      "name": "coolify-cli",
+      "source": "./coolify-cli",
+      "description": "Deploy applications, check deployment status, and manage settings via the Coolify CLI."
+    }
+  ]
+}
