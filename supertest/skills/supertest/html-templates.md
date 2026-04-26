@@ -202,6 +202,13 @@ Replace all `{PLACEHOLDER}` values with actual data when generating.
           <pre>{에러 메시지 원문}</pre>
           <strong>원인 추정:</strong>
           <p>{원인 추정 텍스트}</p>
+          <!-- 아티팩트가 있을 때만 표시 -->
+          <strong>아티팩트:</strong>
+          <ul style="font-size:0.85rem;margin:4px 0">
+            <li>로그: <a href="logs/{TC번호}.log">logs/{TC번호}.log</a></li>
+            <li>스크린샷: <a href="screenshots/{TC번호}-fail.png">screenshots/{TC번호}-fail.png</a></li>
+            <li>스크립트: <a href="scripts/{TC번호}-{목적}.sh">scripts/{TC번호}-{목적}.sh</a></li>
+          </ul>
         </details>
       </td>
     </tr>
@@ -213,6 +220,29 @@ Replace all `{PLACEHOLDER}` values with actual data when generating.
       <td>e2e</td>
       <td><span class="badge badge-skip">SKIP</span></td>
       <td>E2E 설정 없음</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 아티팩트 요약 (존재하는 디렉토리만 표시) -->
+<div class="card">
+  <h2>수집된 아티팩트</h2>
+  <table>
+    <tr><th>종류</th><th>경로</th><th>설명</th></tr>
+    <tr>
+      <td>📋 로그</td>
+      <td><a href="logs/">logs/</a></td>
+      <td>단위/API/E2E 실행 출력 로그</td>
+    </tr>
+    <tr>
+      <td>📸 스크린샷</td>
+      <td><a href="screenshots/">screenshots/</a></td>
+      <td>E2E 실패 시 캡처 이미지</td>
+    </tr>
+    <tr>
+      <td>📜 스크립트</td>
+      <td><a href="scripts/">scripts/</a></td>
+      <td>테스트 중 생성된 curl/seed/검증 스크립트</td>
     </tr>
   </table>
 </div>
@@ -295,3 +325,5 @@ Replace all `{PLACEHOLDER}` values with actual data when generating.
 - FAIL 행에는 반드시 에러 원문과 원인 추정을 채운다.
 - `<style>` 주석을 실제 CSS 내용으로 교체한다 (공통 CSS 스타일 섹션 참조).
 - executive-summary의 배포 판정은 실제 결과에 맞는 항목 하나만 남긴다.
+- FAIL TC의 아티팩트 링크는 실제 저장된 파일만 포함한다. 파일이 없으면 해당 `<li>` 행을 제거한다.
+- 아티팩트 링크 경로는 보고서 파일 기준 상대 경로(`logs/`, `screenshots/`, `scripts/`)로 작성한다.
