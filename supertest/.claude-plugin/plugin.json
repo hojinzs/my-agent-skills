@@ -1,0 +1,8 @@
+{
+  "name": "supertest",
+  "description": "QA expert-style test planning and execution with HTML reports.",
+  "version": "1.0.0",
+  "author": {
+    "name": "hojinzs"
+  }
+}

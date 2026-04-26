@@ -8,6 +8,11 @@
       "name": "coolify-cli",
       "source": "./coolify-cli",
       "description": "Deploy applications, check deployment status, and manage settings via the Coolify CLI."
+    },
+    {
+      "name": "supertest",
+      "source": "./supertest",
+      "description": "QA expert-style test planning and execution with HTML reports."
     }
   ]
 }
