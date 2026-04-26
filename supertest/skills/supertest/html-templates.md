@@ -135,6 +135,7 @@ Replace all `{PLACEHOLDER}` values with actual data when generating.
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SuperTest — 테스트 결과</title>
 <style>
 /* 공통 CSS 스타일 삽입 */
@@ -234,6 +235,7 @@ Replace all `{PLACEHOLDER}` values with actual data when generating.
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SuperTest — 종합 요약</title>
 <style>
 /* 공통 CSS 스타일 삽입 */
