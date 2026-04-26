@@ -145,7 +145,37 @@ SUPERTEST.md 존재?
     - coverage
 ```
 
-**init 인터뷰 질문 목록:**
+**init 인터뷰 — Step 0: 모노리포 / 멀티 언어 감지**
+
+init 인터뷰 시작 전, 아래 파일을 탐색해 프로젝트 구조를 자동 감지한다:
+
+| 감지 파일 | 의미 |
+|-----------|------|
+| `pnpm-workspace.yaml`, `nx.json`, `turbo.json`, `lerna.json` | 모노리포 |
+| 루트 외 여러 `package.json` | JS 멀티 패키지 |
+| 서로 다른 디렉토리에 `pyproject.toml` + `package.json` | 멀티 언어 |
+| `go.mod`, `Cargo.toml`, `build.gradle` 혼재 | 멀티 언어 |
+
+모노리포 또는 멀티 언어로 감지되면, 각 워크스페이스/디렉토리를 분석하여 아래 **확인 테이블**을 사용자에게 제시하고 컨펌을 받는다:
+
+```
+감지된 프로젝트 구조를 확인해주세요:
+
+| # | 경로              | 타입        | 테스트 프레임워크 | E2E        | API 테스트 | 실행 명령          |
+|---|-------------------|-------------|-------------------|------------|------------|--------------------|
+| 1 | packages/frontend | frontend    | Vitest            | Playwright | -          | pnpm test          |
+| 2 | packages/backend  | api-only    | Jest              | -          | curl       | pnpm test          |
+| 3 | services/auth     | api-only    | Pytest            | -          | curl       | pytest             |
+| 4 | apps/mobile       | mobile      | Jest              | Detox      | -          | yarn test          |
+
+수정할 항목이 있으면 번호와 변경 내용을 알려주세요. 없으면 '확인'을 입력하세요.
+```
+
+컨펌 후, SUPERTEST.md에 워크스페이스별 설정을 저장한다 (아래 참고).
+
+단일 프로젝트로 감지되면 기존 인터뷰 흐름을 그대로 사용한다.
+
+**init 인터뷰 질문 목록 (단일 프로젝트 또는 워크스페이스별 공통 항목):**
 1. 프로젝트 타입 (api-only / frontend-only / fullstack / mobile)
 2. 사용 중인 테스트 프레임워크 및 실행 명령
 3. E2E 테스트 도구 (Playwright / Cypress / 없음)
@@ -156,6 +186,33 @@ SUPERTEST.md 존재?
 8. PR 코멘트 자동 게시 여부 + 플랫폼 (GitHub / GitLab)
 9. PR 코멘트 상세도 (summary / detailed / minimal)
 10. 제외할 경로
+
+**모노리포일 때 SUPERTEST.md 추가 섹션:**
+
+```markdown
+## Workspaces
+- monorepo: true
+
+### packages/frontend
+- type: frontend
+- unit_command: pnpm test
+- e2e_command: pnpm playwright test
+- base_url: http://localhost:5173
+
+### packages/backend
+- type: api-only
+- unit_command: pnpm test
+- api_base_url: http://localhost:3000
+- auth_method: bearer
+- auth_token_env: API_TOKEN
+
+### services/auth
+- type: api-only
+- unit_command: pytest
+- api_base_url: http://localhost:8000
+- auth_method: bearer
+- auth_token_env: AUTH_TOKEN
+```
 
 ---
 
