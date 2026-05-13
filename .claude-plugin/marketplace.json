@@ -5,6 +5,11 @@
   },
   "plugins": [
     {
+      "name": "codex-image-gen",
+      "source": "./codex-image-gen",
+      "description": "Generate final-quality images through Codex native image generation, with strict no-renderer fallback and visual QA rules."
+    },
+    {
       "name": "coolify-cli",
       "source": "./coolify-cli",
       "description": "Deploy applications, check deployment status, and manage settings via the Coolify CLI."

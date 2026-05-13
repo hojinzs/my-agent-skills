@@ -1,0 +1,8 @@
+{
+  "name": "codex-image-gen",
+  "description": "Generate final-quality images through Codex native image generation, with strict no-renderer fallback and visual QA rules.",
+  "version": "1.0.1",
+  "author": {
+    "name": "hojinzs"
+  }
+}
