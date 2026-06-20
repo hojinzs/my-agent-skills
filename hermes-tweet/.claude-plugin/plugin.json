@@ -1,0 +1,8 @@
+{
+  "name": "hermes-tweet",
+  "description": "Use Hermes Tweet from Hermes Agent for X/Twitter search, reads, monitors, trends, media, draws, and approval-gated actions.",
+  "version": "0.1.6",
+  "author": {
+    "name": "Xquik"
+  }
+}
