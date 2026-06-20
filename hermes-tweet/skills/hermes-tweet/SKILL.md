@@ -40,8 +40,8 @@ export HERMES_TWEET_ENABLE_ACTIONS=false
 ## Tool Flow
 
 1. Use `tweet_explore` to find a catalog-listed `/api/v1/...` endpoint.
-2. Use `tweet_read` for public read-only endpoints after the route is known.
-3. Use `tweet_action` only for approved writes, private reads, monitors, webhooks, extraction jobs, media, or giveaway draws.
+2. Use `tweet_read` for catalog entries marked `GET` and `action:false`, including safe monitor, extraction, media, and draw reads.
+3. Use `tweet_action` only for catalog entries that require writes, private account changes, webhooks, or explicit `action:true` operations.
 
 ## When To Use
 
