@@ -15,6 +15,11 @@
       "description": "Deploy applications, check deployment status, and manage settings via the Coolify CLI."
     },
     {
+      "name": "hermes-tweet",
+      "source": "./hermes-tweet",
+      "description": "Use Hermes Tweet from Hermes Agent for X/Twitter search, reads, monitors, trends, media, draws, and approval-gated actions."
+    },
+    {
       "name": "supertest",
       "source": "./supertest",
       "description": "QA expert-style test planning and execution with HTML reports."
